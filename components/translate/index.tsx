@@ -4,20 +4,14 @@ import { JigsawStack } from "jigsawstack";
 import { useState } from "react";
 import { toast } from "sonner";
 import { Button } from "../ui/button";
+import languageJson from "../../data/language.json";
 type JigsawStackType = ReturnType<typeof JigsawStack>;
 type TranslateResponse = Awaited<ReturnType<JigsawStackType["translate"]>>;
 
-const data = [
-  { value: "en", label: "English" },
-  { value: "fr", label: "French" },
-  { value: "es", label: "Spanish" },
-  { value: "de", label: "German" },
-  { value: "it", label: "Italian" },
-  { value: "ja", label: "Japanese" },
-  { value: "ko", label: "Korean" },
-  { value: "pt", label: "Portuguese" },
-  { value: "zh", label: "Chinese" },
-];
+const data = Object.keys(languageJson).map((key) => {
+  let lang: Record<string, string> = languageJson;
+  return { value: key, label: lang[key] };
+});
 
 export const Translate = () => {
   const { loading, toggleLoading } = useLoading();
@@ -79,6 +73,7 @@ export const Translate = () => {
       <div className="w-full">
         <p className="text-left font-bold mb-2">Target Language</p>
         <select
+          defaultValue={"es"}
           value={state.target_language}
           onChange={(e) =>
             setState({
@@ -100,7 +95,7 @@ export const Translate = () => {
         onClick={handleTranslation}
         loading={loading}
         disabled={loading || !state.text.length}
-        className="bg-primary rounded-xl text-white hover:text-black font-medium px-4 py-2 sm:mt-10 mt-8 hover:bg-white hover:border-primary border-2 w-full"
+        className="bg-primary rounded-xl text-white hover:text-primary font-medium px-4 py-2 sm:mt-10 mt-8 hover:bg-white hover:border-primary border-2 w-full"
       >
         {loading ? "Translating..." : "Translate"}
       </Button>
