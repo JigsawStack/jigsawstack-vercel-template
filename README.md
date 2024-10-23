@@ -1,6 +1,10 @@
 # [JigsawStack](https://www.jigsawStack.com)
 
-This project extracts data from an image using JigsawStack VOCR.
+This project uses JigsawStack's AI SDK to:
+
+- extract information from images
+- perform sentiment analysis on a given text
+- translate text to a target language
 
 
 ![JigsawStack VOCR](./public/screenshot.png)
