@@ -14,46 +14,6 @@ const components: { [key: string]: React.ReactNode } = {
   sentiment: <Sentiment />,
 };
 
-const TabSelection = () => {
-  const [selected, setSelected] = useState("vocr");
-  return (
-    <Tabs.Root defaultValue={selected} width={"100%"} variant="plain">
-      <Tabs.List
-        width={"100%"}
-        borderWidth={1}
-        justifyContent={"space-between"}
-        paddingRight={"40"}
-        paddingLeft={"40"}
-        borderRadius={12}
-        paddingTop={2}
-        paddingBottom={2}
-        boxShadow={"0px 10px 53px -39px rgba(0,0,0,0.75)"}
-      >
-        {tabs.map((tab) => {
-          const isSelected = selected === tab;
-          return (
-            <Tabs.Trigger
-              value={tab}
-              fontWeight={"bold"}
-              bgColor={isSelected ? "black" : "transparent"}
-              borderWidth={isSelected ? 1 : undefined}
-              alignContent={"center"}
-              textAlign={"center"}
-              justifyContent={"center"}
-              width={"10rem"}
-              color={isSelected ? "white" : "black"}
-              onClick={() => setSelected(tab)}
-              textTransform={"capitalize"}
-            >
-              {tab}
-            </Tabs.Trigger>
-          );
-        })}
-      </Tabs.List>
-    </Tabs.Root>
-  );
-};
-
 export default function Home() {
   const [selected, setSelected] = useState("vocr");
 
@@ -64,7 +24,7 @@ export default function Home() {
         justifyContent={"center"}
         display={"flex"}
         alignItems={"center"}
-        gap={"10"}
+        gap={"8"}
       >
         <Tabs.Root defaultValue={selected} variant="plain">
           <Tabs.List
@@ -77,6 +37,7 @@ export default function Home() {
             paddingTop={2}
             paddingBottom={2}
             boxShadow={"0px 10px 53px -39px rgba(0,0,0,0.75)"}
+            bgColor={"black"}
           >
             {tabs.map((tab) => {
               const isSelected = selected === tab;
@@ -91,7 +52,7 @@ export default function Home() {
                   textAlign={"center"}
                   justifyContent={"center"}
                   width={"10rem"}
-                  color={isSelected ? "white" : "black"}
+                  color={"white"}
                   onClick={() => setSelected(tab)}
                   textTransform={"capitalize"}
                 >

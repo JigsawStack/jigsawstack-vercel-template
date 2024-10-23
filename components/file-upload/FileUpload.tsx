@@ -48,7 +48,7 @@ const FileUploader: React.FC<FileUploaderProps> = (props) => {
   return (
     <div className="w-full mx-auto">
       <div
-        className={`relative border-2 border-dashed rounded-lg p-8 text-center
+        className={`relative border-2 border-dashed rounded-lg bg-gray-200 p-8 text-center
           ${dragActive ? "border-blue-500 bg-blue-50" : "border-gray-300"}
           transition-colors duration-200 ease-in-out`}
         onDragEnter={handleDrag}
