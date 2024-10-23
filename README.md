@@ -1,8 +1,8 @@
 # [JigsawStack](https://www.jigsawStack.com)
 
-This project uses JigsawStack's AI SDK to:
+This project uses JigsawStack's AI SDK to help you achieve the following:
 
-- extract information from images
+- extract information from any image
 - perform sentiment analysis on a given text
 - translate text to a target language
 
