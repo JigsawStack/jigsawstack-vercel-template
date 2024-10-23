@@ -1,11 +1,13 @@
-import { useState } from "react";
-import { LoadingSpinner } from "../Spinner";
 import { useLoading } from "@/hooks/useLoading";
-import FileUploader from "../file-upload/FileUpload";
-import { Button } from "../ui/button";
-import { JigsawStack } from "jigsawstack";
 import { Flex, Input, Text } from "@chakra-ui/react";
 import { File } from "buffer";
+import { JigsawStack } from "jigsawstack";
+import { useState } from "react";
+import { toast } from "sonner";
+import FileUploader from "../file-upload/FileUpload";
+import { LoadingSpinner } from "../Spinner";
+import { Button } from "../ui/button";
+
 type JigsawStackType = ReturnType<typeof JigsawStack>;
 
 type VocrResponse = Awaited<ReturnType<JigsawStackType["vision"]["vocr"]>>;
@@ -20,7 +22,6 @@ export const VOCR = () => {
     if (!file) {
       return;
     }
-
     const jigsawstack = JigsawStack({
       apiKey: process.env.NEXT_PUBLIC_JIGSAWSTACK_PUBLIC_KEY,
     });
@@ -32,13 +33,28 @@ export const VOCR = () => {
         overwrite: true,
       });
 
-      const result = await jigsawstack.vision.vocr({
-        prompt: collect.split(","),
-        file_store_key: fileUploadResult.key,
+      const resp = await fetch("/api/vocr", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          prompt: collect.split(","),
+          file_store_key: fileUploadResult.key,
+        }),
       });
+      const result = await resp.json();
+      if (!resp.ok) {
+        toast.error(result?.message || "Unable to complete translation");
+        return;
+      }
 
       setResult(result);
+      toast.success("Your file has been successfully");
     } catch (error) {
+      let err = error as any;
+      console.error(error);
+      toast.error(err?.message || "Unable to complete vocr");
     } finally {
       toggleLoading();
     }
