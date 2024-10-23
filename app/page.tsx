@@ -24,7 +24,7 @@ export default function Home() {
         justifyContent={"center"}
         display={"flex"}
         alignItems={"center"}
-        gap={"8"}
+        gap={"10"}
       >
         <Tabs.Root defaultValue={selected} variant="plain">
           <Tabs.List
@@ -37,7 +37,6 @@ export default function Home() {
             paddingTop={2}
             paddingBottom={2}
             boxShadow={"0px 10px 53px -39px rgba(0,0,0,0.75)"}
-            bgColor={"black"}
           >
             {tabs.map((tab) => {
               const isSelected = selected === tab;
@@ -52,9 +51,10 @@ export default function Home() {
                   textAlign={"center"}
                   justifyContent={"center"}
                   width={"10rem"}
-                  color={"white"}
+                  color={isSelected ? "white" : "black"}
                   onClick={() => setSelected(tab)}
                   textTransform={"capitalize"}
+                  borderRadius={10}
                 >
                   {tab}
                 </Tabs.Trigger>
