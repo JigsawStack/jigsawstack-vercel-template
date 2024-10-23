@@ -1,73 +1,77 @@
 "use client";
-import { LoadingSpinner } from "@/components/Spinner";
-import { useLoading } from "@/hooks/useLoading";
-import { useState } from "react";
+import { Footer } from "@/components/footer";
+import { Sentiment } from "@/components/sentiment";
+import { Translate } from "@/components/translate";
+import { VOCR } from "@/components/vocr";
+import { Box, Tabs } from "@chakra-ui/react";
+import React, { useState } from "react";
+
+const tabs = ["vocr", "translate", "sentiment"];
+
+const components: { [key: string]: React.ReactNode } = {
+  vocr: <VOCR />,
+  translate: <Translate />,
+  sentiment: <Sentiment />,
+};
 
 export default function Home() {
-  const { loading, toggleLoading } = useLoading();
-  const [url, setUrl] = useState("");
-  const [collect, setCollect] = useState("");
+  const [selected, setSelected] = useState("vocr");
 
   return (
-    <div className="flex max-w-5xl mx-auto flex-col items-center justify-center py-2 min-h-screen">
-      <main className="flex flex-1 w-full flex-col items-center justify-center text-center px-4 mt-12 sm:mt-20">
-        <h1 className="sm:text-6xl text-4xl max-w-[708px] font-bold text-slate-900 mb-10">
-          Describe and retrieve data within an image
-        </h1>
-
-        <div className="w-full mb-8">
-          <p className="text-left font-bold mb-2">Image URL </p>
-          <input
-            className="w-full rounded-md border-2 border-primary py-2 px-2"
-            inputMode="url"
-            placeholder="Enter image URL"
-            value={url}
-            onChange={(e) => setUrl(e.target.value)}
-          />
-        </div>
-
-        <div className="w-full">
-          <p className="text-left font-bold mb-2">
-            Data to extract{" "}
-            <span className="font-medium">
-              (separate with commas to add multiple items)
-            </span>
-          </p>
-          <textarea
-            value={collect}
-            onChange={(e) => setCollect(e.target.value)}
-            rows={4}
-            className="w-full rounded-md py-2 px-2  border-2 border-primary shadow-sm focus:border-black focus:ring-black"
-            placeholder={"e.g. First name, last name"}
-          />
-        </div>
-
-        {!loading && (
-          <button className="bg-primary rounded-xl text-white hover:text-primary font-medium px-4 py-2 sm:mt-10 mt-8 hover:bg-white hover:border-primary border-2 w-full">
-            Extract data &rarr;
-          </button>
-        )}
-
-        {loading && (
-          <button
-            className="bg-primary rounded-xl text-white font-medium px-4 py-2 sm:mt-10 mt-8 flex hover:bg-black/80 w-full items-center justify-center cursor-pointer"
-            disabled
+    <Box className="min-h-screen flex flex-col">
+      <Box
+        className="flex-shrink-0 p-6"
+        justifyContent={"center"}
+        display={"flex"}
+        alignItems={"center"}
+        gap={"10"}
+      >
+        <Tabs.Root defaultValue={selected} variant="plain">
+          <Tabs.List
+            width={"100%"}
+            borderWidth={1}
+            justifyContent={"space-between"}
+            paddingRight={"40"}
+            paddingLeft={"40"}
+            borderRadius={12}
+            paddingTop={2}
+            paddingBottom={2}
+            boxShadow={"0px 10px 53px -39px rgba(0,0,0,0.75)"}
           >
-            <LoadingSpinner />
-          </button>
-        )}
-      </main>
-
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://jigsawstack.com"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by <b>JigsawStack</b>
+            {tabs.map((tab) => {
+              const isSelected = selected === tab;
+              return (
+                <Tabs.Trigger
+                  key={tab}
+                  value={tab}
+                  fontWeight={"bold"}
+                  bgColor={isSelected ? "black" : "transparent"}
+                  borderWidth={isSelected ? 1 : undefined}
+                  alignContent={"center"}
+                  textAlign={"center"}
+                  justifyContent={"center"}
+                  width={"10rem"}
+                  color={isSelected ? "white" : "black"}
+                  onClick={() => setSelected(tab)}
+                  textTransform={"capitalize"}
+                  borderRadius={10}
+                >
+                  {tab}
+                </Tabs.Trigger>
+              );
+            })}
+          </Tabs.List>
+        </Tabs.Root>
+        <a href="https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FJigsawStack%2Fjigsawstack-vercel-template&env=NEXT_PUBLIC_JIGSAWSTACK_PUBLIC_KEY">
+          <img src="https://vercel.com/button" alt="Deploy with Vercel" />
         </a>
-      </footer>
-    </div>
+      </Box>
+      <Box className="flex-grow">
+        <Box className="flex max-w-5xl mx-auto flex-col items-center justify-center py-2 ">
+          {components[selected] || <div>Select a tab to see its content.</div>}
+        </Box>
+      </Box>
+      <Footer />
+    </Box>
   );
 }
