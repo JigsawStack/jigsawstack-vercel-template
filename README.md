@@ -3,7 +3,7 @@
 This project extracts data from an image using JigsawStack VOCR.
 
 
-[![JigsawStack VOCR](./public/screenshot.png)]
+![JigsawStack VOCR](./public/screenshot.png)
 
 ## Running Locally
 
