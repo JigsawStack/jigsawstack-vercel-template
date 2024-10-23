@@ -14,14 +14,20 @@ export const Sentiment = () => {
   const [result, setResult] = useState<SentimentReponse>();
   const { loading, toggleLoading } = useLoading();
   const handleRequest = async () => {
-    toggleLoading();
-    const jigsawstack = JigsawStack({
-      apiKey: process.env.NEXT_PUBLIC_JIGSAWSTACK_PUBLIC_KEY,
-    });
     try {
-      const result = await jigsawstack.sentiment({ text: collect });
+      toggleLoading();
+      const resp = await fetch("/api/sentiment", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ text: collect }),
+      });
+      const result = await resp.json();
+      if (!resp.ok) {
+        throw new Error(`Error: ${result.error}`);
+      }
       setResult(result);
-      console.log(result);
     } catch (error) {
     } finally {
       toggleLoading();

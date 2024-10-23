@@ -1,8 +1,9 @@
+import { useLoading } from "@/hooks/useLoading";
 import { Flex, Text } from "@chakra-ui/react";
 import { JigsawStack } from "jigsawstack";
 import { useState } from "react";
+import { toast } from "sonner";
 import { Button } from "../ui/button";
-import { useLoading } from "@/hooks/useLoading";
 type JigsawStackType = ReturnType<typeof JigsawStack>;
 type TranslateResponse = Awaited<ReturnType<JigsawStackType["translate"]>>;
 
@@ -28,20 +29,27 @@ export const Translate = () => {
   });
   const [result, setResult] = useState<TranslateResponse>();
   const handleTranslation = async () => {
-    const jigsawstack = JigsawStack({
-      apiKey: process.env.NEXT_PUBLIC_JIGSAWSTACK_PUBLIC_KEY,
-    });
-
     try {
       toggleLoading();
-      const result = await jigsawstack.translate({
-        text: state.text,
-        target_language: state.target_language || "es",
+      const resp = await fetch("/api/translate", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          text: state.text,
+          target_language: state.target_language || "es",
+        }),
       });
+      const result = await resp.json();
+      if (!resp.ok) {
+        toast.error(result?.message || "Unable to complete translation");
+        return;
+      }
       setResult(result);
-      console.log(result);
     } catch (error) {
       console.error(error);
+      toast.error("Error: Unable to complete translation");
     } finally {
       toggleLoading();
     }

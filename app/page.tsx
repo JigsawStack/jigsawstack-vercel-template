@@ -6,16 +6,16 @@ import { VOCR } from "@/components/vocr";
 import { Box, Tabs } from "@chakra-ui/react";
 import React, { useState } from "react";
 
-const tabs = ["vocr", "translate", "sentiment"];
+const tabs = ["VOCR", "translate", "sentiment"];
 
 const components: { [key: string]: React.ReactNode } = {
-  vocr: <VOCR />,
+  VOCR: <VOCR />,
   translate: <Translate />,
   sentiment: <Sentiment />,
 };
 
 export default function Home() {
-  const [selected, setSelected] = useState("vocr");
+  const [selected, setSelected] = useState("VOCR");
 
   return (
     <Box className="min-h-screen flex flex-col">
