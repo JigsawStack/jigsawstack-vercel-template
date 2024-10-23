@@ -26,13 +26,15 @@ export default function Home() {
         alignItems={"center"}
         gap={"10"}
       >
+        <img src="/logo-dark.svg" alt="JigsawStack Logo" width={200} />
         <Tabs.Root defaultValue={selected} variant="plain">
           <Tabs.List
             width={"100%"}
             borderWidth={1}
             justifyContent={"space-between"}
-            paddingRight={"40"}
-            paddingLeft={"40"}
+            alignSelf={"center"}
+            paddingRight={["3", "2"]}
+            paddingLeft={["3", "2"]}
             borderRadius={12}
             paddingTop={2}
             paddingBottom={2}
