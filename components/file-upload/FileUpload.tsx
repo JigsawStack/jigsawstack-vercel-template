@@ -6,6 +6,43 @@ type FileUploaderProps = {
   onFileChange: (file?: File) => void;
 };
 
+const FilePreview: React.FC<{
+  file?: File;
+}> = ({ file }) => {
+  const [previewUrl, setPreviewUrl] = useState<string>("");
+
+  useEffect(() => {
+    if (!file) {
+      return;
+    }
+
+    // Create URL for the file
+    const objectUrl = URL.createObjectURL(file as any);
+    setPreviewUrl(objectUrl);
+
+    // Cleanup function to revoke the URL when component unmounts
+    return () => URL.revokeObjectURL(objectUrl);
+  }, [file]);
+
+  if (!file) {
+    return null;
+  }
+
+  return (
+    <div
+      className={`relative border-2  rounded-lg bg-gray-200 text-center
+      ${"border-gray-300"}
+      transition-colors duration-200 ease-in-out h-60`}
+    >
+      <img
+        src={previewUrl}
+        className="w-full h-full object-cover object-top rounded-lg"
+        alt={file.name}
+      />
+    </div>
+  );
+};
+
 const FileUploader: React.FC<FileUploaderProps> = (props) => {
   const [dragActive, setDragActive] = useState(false);
   const [files, setFiles] = useState<File[]>([]);
@@ -26,13 +63,13 @@ const FileUploader: React.FC<FileUploaderProps> = (props) => {
     setDragActive(false);
 
     const droppedFiles = [...e.dataTransfer.files];
-    setFiles((prevFiles) => [...prevFiles, ...droppedFiles]);
+    setFiles((prevFiles) => [...droppedFiles]);
   }, []);
 
   const handleChange = useCallback((e) => {
     e.preventDefault();
     const selectedFiles = [...e.target.files];
-    setFiles((prevFiles) => [...prevFiles, ...selectedFiles]);
+    setFiles((prevFiles) => [...selectedFiles]);
   }, []);
 
   const removeFile = useCallback((fileName) => {
@@ -47,33 +84,37 @@ const FileUploader: React.FC<FileUploaderProps> = (props) => {
 
   return (
     <div className="w-full mx-auto">
-      <div
-        className={`relative border-2 border-dashed rounded-lg bg-gray-200 p-8 text-center
-          ${dragActive ? "border-blue-500 bg-blue-50" : "border-gray-300"}
-          transition-colors duration-200 ease-in-out`}
-        onDragEnter={handleDrag}
-        onDragLeave={handleDrag}
-        onDragOver={handleDrag}
-        onDrop={handleDrop}
-      >
-        <input
-          type="file"
-          className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-          onChange={handleChange}
-          multiple={false}
-          accept="image/jpeg, image/png"
-        />
+      {files.length ? (
+        <FilePreview file={files[0]} />
+      ) : (
+        <div
+          className={`relative border-2 border-dashed rounded-lg bg-gray-200 p-8 text-center
+            ${dragActive ? "border-blue-500 bg-blue-50" : "border-gray-300"}
+            transition-colors duration-200 ease-in-out`}
+          onDragEnter={handleDrag}
+          onDragLeave={handleDrag}
+          onDragOver={handleDrag}
+          onDrop={handleDrop}
+        >
+          <input
+            type="file"
+            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+            onChange={handleChange}
+            multiple={false}
+            accept="image/jpeg, image/png"
+          />
 
-        <Upload className="mx-auto h-12 w-12 text-gray-400" />
+          <Upload className="mx-auto h-12 w-12 text-gray-400" />
 
-        <p className="mt-4 text-sm text-gray-600">
-          Drag and drop file here, or click to select file
-        </p>
-      </div>
+          <p className="mt-4 text-sm text-gray-600">
+            Drag and drop file here, or click to select file
+          </p>
+        </div>
+      )}
 
       {files.length > 0 && (
         <div className="mt-4">
-          <h3 className="text-sm font-medium text-gray-700">Selected files:</h3>
+          <h3 className="text-sm font-medium text-gray-700">Selected file:</h3>
           <ul className="mt-2 divide-y divide-gray-200">
             {files.map((file) => (
               <li
