@@ -20,25 +20,32 @@ export default function Home() {
   return (
     <Box className="min-h-screen flex flex-col">
       <Box
-        className="flex-shrink-0 p-6"
+        className="flex flex-col md:flex-row items-center justify-center p-6 gap-4 md:gap-10"
         justifyContent={"center"}
         display={"flex"}
         alignItems={"center"}
         gap={"10"}
       >
-        <img src="/logo-dark.svg" alt="JigsawStack Logo" width={200} />
-        <Tabs.Root defaultValue={selected} variant="plain">
+        <img
+          src="/logo-dark.svg"
+          alt="JigsawStack Logo"
+          className="w-40 md:w-52 flex-shrink-0"
+        />
+        <Tabs.Root
+          defaultValue={selected}
+          variant="plain"
+          className="w-full max-w-md"
+        >
           <Tabs.List
             width={"100%"}
             borderWidth={1}
-            justifyContent={"space-between"}
             alignSelf={"center"}
             paddingRight={["3", "2"]}
             paddingLeft={["3", "2"]}
             borderRadius={12}
             paddingTop={2}
             paddingBottom={2}
-            boxShadow={"0px 10px 53px -39px rgba(0,0,0,0.75)"}
+            className="flex flex-wrap md:flex-nowrap justify-center md:justify-between gap-2 shadow-sm"
           >
             {tabs.map((tab) => {
               const isSelected = selected === tab;
